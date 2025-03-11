@@ -6,9 +6,9 @@ type TriggerProps = React.ComponentProps<typeof AlertModalPrimitive.Trigger>;
 type TriggerRef = React.ElementRef<typeof AlertModalPrimitive.Trigger>;
 
 const ModalTrigger = React.forwardRef<TriggerRef, TriggerProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <AlertModalPrimitive.Trigger
-      ref={forwardedRef}
+      ref={ref}
       className={clsx("", className)}
       {...props}
     >
@@ -23,14 +23,14 @@ type ContentProps = React.ComponentProps<typeof AlertModalPrimitive.Content>;
 type ContentRef = React.ElementRef<typeof AlertModalPrimitive.Content>;
 
 const ModalContent = React.forwardRef<ContentRef, ContentProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <AlertModalPrimitive.Content
       className={clsx(
         "fixed left-1/2 top-20 z-50 -translate-x-1/2 rounded-[3px] bg-white p-8  shadow-md",
         className
       )}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </AlertModalPrimitive.Content>
@@ -57,11 +57,11 @@ type OverlayProps = React.ComponentProps<typeof AlertModalPrimitive.Overlay>;
 type OverlayRef = React.ElementRef<typeof AlertModalPrimitive.Overlay>;
 
 const ModalOverlay = React.forwardRef<OverlayRef, OverlayProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <AlertModalPrimitive.Overlay
       className={clsx("fixed inset-0 z-50 bg-black bg-opacity-40", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </AlertModalPrimitive.Overlay>
@@ -73,11 +73,11 @@ type TitleProps = React.ComponentProps<typeof AlertModalPrimitive.Title>;
 type TitleRef = React.ElementRef<typeof AlertModalPrimitive.Title>;
 
 const ModalTitle = React.forwardRef<TitleRef, TitleProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <AlertModalPrimitive.Title
       className={clsx("text-2xl", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </AlertModalPrimitive.Title>
@@ -91,11 +91,11 @@ type DescriptionProps = React.ComponentProps<
 type DescriptionRef = React.ElementRef<typeof AlertModalPrimitive.Description>;
 
 const ModalDescription = React.forwardRef<DescriptionRef, DescriptionProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <AlertModalPrimitive.Description
       className={clsx("text-sm text-gray-500", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </AlertModalPrimitive.Description>
@@ -107,11 +107,11 @@ type CancelProps = React.ComponentProps<typeof AlertModalPrimitive.Cancel>;
 type CancelRef = React.ElementRef<typeof AlertModalPrimitive.Cancel>;
 
 const ModalCancel = React.forwardRef<CancelRef, CancelProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <AlertModalPrimitive.Cancel
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </AlertModalPrimitive.Cancel>
@@ -123,11 +123,11 @@ type ActionProps = React.ComponentProps<typeof AlertModalPrimitive.Action>;
 type ActionRef = React.ElementRef<typeof AlertModalPrimitive.Action>;
 
 const ModalAction = React.forwardRef<ActionRef, ActionProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <AlertModalPrimitive.Action
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </AlertModalPrimitive.Action>

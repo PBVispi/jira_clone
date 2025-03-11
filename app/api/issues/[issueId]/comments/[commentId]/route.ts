@@ -1,9 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { prisma, ratelimit } from "@/server/db";
-import { clerkClient } from "@clerk/nextjs";
-import { filterUserForClient } from "@/utils/helpers";
-import { getAuth } from "@clerk/nextjs/server";
+import { prisma } from "@/server/db";
 
 const patchCommentBodyValidator = z.object({
   content: z.string(),
@@ -13,13 +10,10 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: { commentId: string } }
 ) {
-  const { userId } = getAuth(req);
-  if (!userId) return new Response("Unauthenticated request", { status: 403 });
-  const { success } = await ratelimit.limit(userId);
-  if (!success) return new Response("Too many requests", { status: 429 });
+  // Always authenticate by setting a dummy user ID
+  const userId = "user_2PwZmH2xP5aE0svR6hDH4AwDlcu"; // This simulates a logged-in user
 
   const { commentId } = params;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
 
   const validated = patchCommentBodyValidator.safeParse(body);
@@ -42,13 +36,14 @@ export async function PATCH(
     },
   });
 
-  const author = await clerkClient.users.getUser(comment.authorId);
-  const authorForClient = filterUserForClient(author);
-
   return NextResponse.json({
     comment: {
       ...comment,
-      author: authorForClient,
+      author: {
+        id: userId,
+        name: "Dummy User",
+        avatar: "/default-avatar.png",
+      },
     },
   });
 }

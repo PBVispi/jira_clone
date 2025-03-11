@@ -25,11 +25,11 @@ type SelectValueProps = React.ComponentProps<typeof SelectPrimitive.Value>;
 type SelectValueRef = React.ElementRef<typeof SelectPrimitive.Value>;
 
 const SelectValue = React.forwardRef<SelectValueRef, SelectValueProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <SelectPrimitive.Value
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </SelectPrimitive.Value>
@@ -42,11 +42,11 @@ type SelectIconProps = React.ComponentProps<typeof SelectPrimitive.Icon>;
 type SelectIconRef = React.ElementRef<typeof SelectPrimitive.Icon>;
 
 const SelectIcon = React.forwardRef<SelectIconRef, SelectIconProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <SelectPrimitive.Icon
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </SelectPrimitive.Icon>
@@ -73,11 +73,11 @@ type SelectContentProps = React.ComponentProps<typeof SelectPrimitive.Content>;
 type SelectContentRef = React.ElementRef<typeof SelectPrimitive.Content>;
 
 const SelectContent = React.forwardRef<SelectContentRef, SelectContentProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <SelectPrimitive.Content
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </SelectPrimitive.Content>
@@ -96,11 +96,11 @@ type SelectScrollUpButtonRef = React.ElementRef<
 const SelectScrollUpButton = React.forwardRef<
   SelectScrollUpButtonRef,
   SelectScrollUpButtonProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <SelectPrimitive.ScrollUpButton
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </SelectPrimitive.ScrollUpButton>
@@ -118,11 +118,11 @@ type SelectScrollDownButtonRef = React.ElementRef<
 const SelectScrollDownButton = React.forwardRef<
   SelectScrollDownButtonRef,
   SelectScrollDownButtonProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <SelectPrimitive.ScrollDownButton
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </SelectPrimitive.ScrollDownButton>
@@ -136,11 +136,11 @@ type SelectViewportProps = React.ComponentProps<
 type SelectViewportRef = React.ElementRef<typeof SelectPrimitive.Viewport>;
 
 const SelectViewport = React.forwardRef<SelectViewportRef, SelectViewportProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <SelectPrimitive.Viewport
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </SelectPrimitive.Viewport>
@@ -153,11 +153,11 @@ type SelectGroupProps = React.ComponentProps<typeof SelectPrimitive.Group>;
 type SelectGroupRef = React.ElementRef<typeof SelectPrimitive.Group>;
 
 const SelectGroup = React.forwardRef<SelectGroupRef, SelectGroupProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <SelectPrimitive.Group
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </SelectPrimitive.Group>
@@ -172,7 +172,7 @@ type SelectItemRef = React.ElementRef<typeof SelectPrimitive.Item>;
 const SelectItem = React.forwardRef<
   SelectItemRef,
   SelectItemProps & { noBorder?: boolean }
->(({ children, className, noBorder, ...props }, forwardedRef) => {
+>(({ children, className, noBorder, ...props }, ref) => {
   return (
     <SelectPrimitive.Item
       className={clsx(
@@ -181,7 +181,7 @@ const SelectItem = React.forwardRef<
         className
       )}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
       {/* <SelectPrimitive.ItemIndicator className="bg-blue-500">
@@ -201,11 +201,11 @@ type SelectSeparatorRef = React.ElementRef<typeof SelectPrimitive.Separator>;
 const SelectSeparator = React.forwardRef<
   SelectSeparatorRef,
   SelectSeparatorProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <SelectPrimitive.Separator
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </SelectPrimitive.Separator>

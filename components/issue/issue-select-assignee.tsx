@@ -71,19 +71,20 @@ const IssueAssigneeSelect: React.FC<{
         )}
       >
         <SelectValue asChild>
-          <Fragment>
-            <Avatar
-              size={avatarSize}
-              src={issue.assignee?.avatar}
-              alt={`${issue.assignee?.name ?? "Unassigned"}`}
-            />
-            {avatarOnly ? null : (
-              <span className="rounded-md bg-opacity-30 px-2 text-sm">
-                {issue.assignee?.name ?? "Unassigned"}
-              </span>
-            )}
-          </Fragment>
-        </SelectValue>
+        <div className="flex items-center gap-x-2">
+          <Avatar
+            size={avatarSize}
+            src={issue.assignee?.avatar}
+            alt={`${issue.assignee?.name ?? "Unassigned"}`}
+          />
+          {avatarOnly ? null : (
+            <span className="rounded-md bg-opacity-30 px-2 text-sm">
+              {issue.assignee?.name ?? "Unassigned"}
+            </span>
+          )}
+        </div>
+      </SelectValue>
+
       </SelectTrigger>
       <SelectPortal className="z-50 w-full">
         <SelectContent position="popper">

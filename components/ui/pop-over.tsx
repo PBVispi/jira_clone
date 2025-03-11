@@ -9,11 +9,11 @@ type PopoverTriggerProps = React.ComponentProps<
 type PopoverTriggerRef = React.ElementRef<typeof PopoverPrimitive.Trigger>;
 
 const PopoverTrigger = React.forwardRef<PopoverTriggerRef, PopoverTriggerProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <PopoverPrimitive.Trigger
       className={className}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </PopoverPrimitive.Trigger>
@@ -26,11 +26,11 @@ type PopoverAnchorProps = React.ComponentProps<typeof PopoverPrimitive.Anchor>;
 type PopoverAnchorRef = React.ElementRef<typeof PopoverPrimitive.Anchor>;
 
 const PopoverAnchor = React.forwardRef<PopoverAnchorRef, PopoverAnchorProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <PopoverPrimitive.Anchor
       className={className}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </PopoverPrimitive.Anchor>
@@ -59,11 +59,11 @@ type PopoverContentProps = React.ComponentProps<
 type PopoverContentRef = React.ElementRef<typeof PopoverPrimitive.Content>;
 
 const PopoverContent = React.forwardRef<PopoverContentRef, PopoverContentProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <PopoverPrimitive.Content
       className={className}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </PopoverPrimitive.Content>
@@ -76,8 +76,8 @@ type PopoverCloseProps = React.ComponentProps<typeof PopoverPrimitive.Close>;
 type PopoverCloseRef = React.ElementRef<typeof PopoverPrimitive.Close>;
 
 const PopoverClose = React.forwardRef<PopoverCloseRef, PopoverCloseProps>(
-  ({ children, className, ...props }, forwardedRef) => (
-    <PopoverPrimitive.Close className={className} {...props} ref={forwardedRef}>
+  ({ children, className, ...props }, ref) => (
+    <PopoverPrimitive.Close className={className} {...props} ref={ref}>
       {children}
     </PopoverPrimitive.Close>
   )
@@ -89,8 +89,8 @@ type PopoverArrowProps = React.ComponentProps<typeof PopoverPrimitive.Arrow>;
 type PopoverArrowRef = React.ElementRef<typeof PopoverPrimitive.Arrow>;
 
 const PopoverArrow = React.forwardRef<PopoverArrowRef, PopoverArrowProps>(
-  ({ children, className, ...props }, forwardedRef) => (
-    <PopoverPrimitive.Arrow className={className} {...props} ref={forwardedRef}>
+  ({ children, className, ...props }, ref) => (
+    <PopoverPrimitive.Arrow className={className} {...props} ref={ref}>
       {children}
     </PopoverPrimitive.Arrow>
   )

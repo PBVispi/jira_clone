@@ -2,11 +2,13 @@
 import { type IssueType } from "@/utils/types";
 import { type Sprint } from "@prisma/client";
 import { type ReactNode, createContext, useContext, useState } from "react";
-import { type UserResource } from "@clerk/types";
+
+// Dummy type for UserResource["id"], since Clerk is removed
+type UserId = string;
 
 type FiltersContextProps = {
-  assignees: UserResource["id"][];
-  setAssignees: React.Dispatch<React.SetStateAction<UserResource["id"][]>>;
+  assignees: UserId[];
+  setAssignees: React.Dispatch<React.SetStateAction<UserId[]>>;
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   epics: IssueType["id"][];
@@ -19,24 +21,19 @@ type FiltersContextProps = {
 
 const FiltersContext = createContext<FiltersContextProps>({
   assignees: [],
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setAssignees: () => {},
   search: "",
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setSearch: () => {},
   epics: [],
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setEpics: () => {},
   issueTypes: [],
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setIssueTypes: () => {},
   sprints: [],
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setSprints: () => {},
 });
 
 export const FiltersProvider = ({ children }: { children: ReactNode }) => {
-  const [assignees, setAssignees] = useState<UserResource["id"][]>([]);
+  const [assignees, setAssignees] = useState<UserId[]>([]);
   const [search, setSearch] = useState<string>("");
   const [epics, setEpics] = useState<IssueType["id"][]>([]);
   const [issueTypes, setIssueTypes] = useState<IssueType["type"][]>([]);

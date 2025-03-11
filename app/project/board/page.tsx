@@ -3,7 +3,6 @@ import { type Metadata } from "next";
 import { getQueryClient } from "@/utils/get-query-client";
 import { Hydrate } from "@/utils/hydrate";
 import { dehydrate } from "@tanstack/query-core";
-import { currentUser } from "@clerk/nextjs";
 import {
   getInitialIssuesFromServer,
   getInitialProjectFromServer,
@@ -15,17 +14,17 @@ export const metadata: Metadata = {
 };
 
 const BoardPage = async () => {
-  const user = await currentUser();
+  const defaultUserId = "init-user"; // Default user ID instead of Clerk authentication
   const queryClient = getQueryClient();
 
   await Promise.all([
-    await queryClient.prefetchQuery(["issues"], () =>
-      getInitialIssuesFromServer(user?.id)
+    queryClient.prefetchQuery(["issues"], () =>
+      getInitialIssuesFromServer(defaultUserId)
     ),
-    await queryClient.prefetchQuery(["sprints"], () =>
-      getInitialSprintsFromServer(user?.id)
+    queryClient.prefetchQuery(["sprints"], () =>
+      getInitialSprintsFromServer(defaultUserId)
     ),
-    await queryClient.prefetchQuery(["project"], getInitialProjectFromServer),
+    queryClient.prefetchQuery(["project"], getInitialProjectFromServer),
   ]);
 
   const dehydratedState = dehydrate(queryClient);

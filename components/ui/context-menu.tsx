@@ -10,11 +10,11 @@ type ContextTriggerProps = React.ComponentProps<
 type ContextTriggerRef = React.ElementRef<typeof ContextMenuPrimitive.Trigger>;
 
 const ContextTrigger = React.forwardRef<ContextTriggerRef, ContextTriggerProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <ContextMenuPrimitive.Trigger
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </ContextMenuPrimitive.Trigger>
@@ -45,11 +45,11 @@ type ContextContentProps = React.ComponentProps<
 type ContextContentRef = React.ElementRef<typeof ContextMenuPrimitive.Content>;
 
 const ContextContent = React.forwardRef<ContextContentRef, ContextContentProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <ContextMenuPrimitive.Content
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </ContextMenuPrimitive.Content>
@@ -64,11 +64,11 @@ type ContextLabelProps = React.ComponentProps<
 type ContextLabelRef = React.ElementRef<typeof ContextMenuPrimitive.Label>;
 
 const ContextLabel = React.forwardRef<ContextLabelRef, ContextLabelProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <ContextMenuPrimitive.Label
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </ContextMenuPrimitive.Label>
@@ -81,11 +81,11 @@ type ContextItemProps = React.ComponentProps<typeof ContextMenuPrimitive.Item>;
 type ContextItemRef = React.ElementRef<typeof ContextMenuPrimitive.Item>;
 
 const ContextItem = React.forwardRef<ContextItemRef, ContextItemProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <ContextMenuPrimitive.Item
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </ContextMenuPrimitive.Item>
@@ -100,11 +100,11 @@ type ContextGroupProps = React.ComponentProps<
 type ContextGroupRef = React.ElementRef<typeof ContextMenuPrimitive.Group>;
 
 const ContextGroup = React.forwardRef<ContextGroupRef, ContextGroupProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <ContextMenuPrimitive.Group
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </ContextMenuPrimitive.Group>
@@ -131,11 +131,11 @@ type ContextSubTriggerRef = React.ElementRef<
 const ContextSubTrigger = React.forwardRef<
   ContextSubTriggerRef,
   ContextSubTriggerProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <ContextMenuPrimitive.SubTrigger
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </ContextMenuPrimitive.SubTrigger>
@@ -153,11 +153,11 @@ type ContextSubContentRef = React.ElementRef<
 const ContextSubContent = React.forwardRef<
   ContextSubContentRef,
   ContextSubContentProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <ContextMenuPrimitive.SubContent
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </ContextMenuPrimitive.SubContent>
@@ -175,11 +175,11 @@ type ContextSeparatorRef = React.ElementRef<
 const ContextSeparator = React.forwardRef<
   ContextSeparatorRef,
   ContextSeparatorProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <ContextMenuPrimitive.Separator
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </ContextMenuPrimitive.Separator>

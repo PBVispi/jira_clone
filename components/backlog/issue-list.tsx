@@ -9,19 +9,17 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { EmtpyIssue } from "../issue/issue-empty";
 import { type IssueType } from "@/utils/types";
 import clsx from "clsx";
-import { useUser } from "@clerk/clerk-react";
 import { useStrictModeDroppable } from "@/hooks/use-strictmode-droppable";
-import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
   sprintId,
   issues,
 }) => {
   const { createIssue, isCreating } = useIssues();
-  const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [droppableEnabled] = useStrictModeDroppable();
-  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
+
+  const defaultUserId = "init-user"; // Default user ID instead of Clerk authentication
 
   if (!droppableEnabled) {
     return null;
@@ -34,11 +32,6 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
     name: string;
     type: IssueType["type"];
   }) {
-    if (!isAuthenticated) {
-      openAuthModal();
-      return;
-    }
-
     if (!name) {
       return;
     }
@@ -49,7 +42,7 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
         type,
         parentId: null,
         sprintId,
-        reporterId: user?.id ?? null,
+        reporterId: defaultUserId, // Replaced Clerk user with a default user
       },
       {
         onSuccess: () => {
@@ -58,28 +51,28 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
       }
     );
   }
+  
   return (
     <AccordionContent className="pt-2">
-      <Droppable droppableId={sprintId ?? "backlog"}>
-        {({ droppableProps, innerRef, placeholder }) => (
-          <div
-            {...droppableProps}
-            ref={innerRef}
-            className={clsx(issues.length == 0 && "min-h-[1px]")}
-          >
+      <Droppable droppableId={sprintId ?? "backlog"} isDropDisabled={false} isCombineEnabled={false}  ignoreContainerClipping={false}>
+          {({ droppableProps, innerRef, placeholder }) => (
             <div
-              className={clsx(issues.length && "border-[0.3px]", "divide-y ")}
+              {...droppableProps}
+              ref={innerRef}
+              className={clsx(issues.length == 0 && "min-h-[1px]")}
             >
-              {issues
-                .sort((a, b) => a.sprintPosition - b.sprintPosition)
-                .map((issue, index) => (
-                  <Issue key={issue.id} index={index} issue={issue} />
-                ))}
+              <div className={clsx(issues.length && "border-[0.3px]", "divide-y ")}>
+                {issues
+                  .sort((a, b) => a.sprintPosition - b.sprintPosition)
+                  .map((issue, index) => (
+                    <Issue key={issue.id} index={index} issue={issue} />
+                  ))}
+              </div>
+              {placeholder}
             </div>
-            {placeholder}
-          </div>
-        )}
-      </Droppable>
+          )}
+        </Droppable>
+
 
       <Button
         onClick={() => setIsEditing(true)}

@@ -1,10 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { prisma, ratelimit } from "@/server/db";
+import { prisma } from "@/server/db";
 import { type DefaultUser, type Comment } from "@prisma/client";
 import { z } from "zod";
-import { getAuth } from "@clerk/nextjs/server";
-import { clerkClient } from "@clerk/nextjs";
-import { filterUserForClient } from "@/utils/helpers";
 
 export type GetIssueCommentsResponse = {
   comments: GetIssueCommentResponse["comment"][];
@@ -31,24 +28,14 @@ export async function GET(
 
   const userIds = comments.map((c) => c.authorId);
 
-  // USE THIS IF RUNNING LOCALLY -----------------------
-  // const users = await prisma.defaultUser.findMany({
-  //   where: {
-  //     id: {
-  //       in: userIds,
-  //     },
-  //   },
-  // });
-  // --------------------------------------------------
-
-  // COMMENT THIS IF RUNNING LOCALLY ------------------
-  const users = (
-    await clerkClient.users.getUserList({
-      userId: userIds,
-      limit: 110,
-    })
-  ).map(filterUserForClient);
-  // --------------------------------------------------
+  // Fetch users directly from the database (Removed Clerk)
+  const users = await prisma.defaultUser.findMany({
+    where: {
+      id: {
+        in: userIds,
+      },
+    },
+  });
 
   const commentsForClient = comments.map((comment) => {
     const author = users.find((u) => u.id === comment.authorId) ?? null;
@@ -69,13 +56,8 @@ export async function POST(
   req: NextRequest,
   { params }: { params: { issueId: string } }
 ) {
-  const { userId } = getAuth(req);
-  if (!userId) return new Response("Unauthenticated request", { status: 403 });
-  const { success } = await ratelimit.limit(userId);
-  if (!success) return new Response("Too many requests", { status: 429 });
-
+  // Removed Clerk Authentication and Rate Limiting
   const { issueId } = params;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
 
   const validated = postCommentBodyValidator.safeParse(body);
@@ -96,10 +78,7 @@ export async function POST(
     },
   });
 
-  // USE THIS INSTEAD IF YOU HAVE USERS IN CLERK
-  // const author = await clerkClient.users.getUser(comment.authorId);
-  // const authorForClient = filterUserForClient(author);
-
+  // Fetch author from the database instead of Clerk
   const authorForClient = await prisma.defaultUser.findUnique({
     where: {
       id: comment.authorId,

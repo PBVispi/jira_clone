@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { prisma, ratelimit } from "@/server/db";
+import { prisma } from "@/server/db";
 import {
   IssueType,
   type Issue,
@@ -7,13 +7,10 @@ import {
   type DefaultUser,
 } from "@prisma/client";
 import { z } from "zod";
-import { getAuth } from "@clerk/nextjs/server";
 import {
   calculateInsertPosition,
-  filterUserForClient,
   generateIssuesForClient,
 } from "@/utils/helpers";
-import { clerkClient } from "@clerk/nextjs";
 
 const postIssuesBodyValidator = z.object({
   name: z.string(),
@@ -58,11 +55,8 @@ export type GetIssuesResponse = {
 };
 
 export async function GET(req: NextRequest) {
-  const { userId } = getAuth(req);
-
   const activeIssues = await prisma.issue.findMany({
     where: {
-      creatorId: userId ?? "init",
       isDeleted: false,
     },
   });
@@ -81,24 +75,14 @@ export async function GET(req: NextRequest) {
     .flatMap((issue) => [issue.assigneeId, issue.reporterId] as string[])
     .filter(Boolean);
 
-  // USE THIS IF RUNNING LOCALLY -----------------------
-  // const users = await prisma.defaultUser.findMany({
-  //   where: {
-  //     id: {
-  //       in: userIds,
-  //     },
-  //   },
-  // });
-  // --------------------------------------------------
-
-  // COMMENT THIS IF RUNNING LOCALLY ------------------
-  const users = (
-    await clerkClient.users.getUserList({
-      userId: userIds,
-      limit: 10,
-    })
-  ).map(filterUserForClient);
-  // --------------------------------------------------
+  // Fetch users from the database instead of Clerk
+  const users = await prisma.defaultUser.findMany({
+    where: {
+      id: {
+        in: userIds,
+      },
+    },
+  });
 
   const issuesForClient = generateIssuesForClient(
     activeIssues,
@@ -106,90 +90,61 @@ export async function GET(req: NextRequest) {
     activeSprints.map((sprint) => sprint.id)
   );
 
-  // const issuesForClient = await getIssuesFromServer();
   return NextResponse.json({ issues: issuesForClient });
 }
 
 // POST
 export async function POST(req: NextRequest) {
-  const { userId } = getAuth(req);
-  if (!userId) return new Response("Unauthenticated request", { status: 403 });
-  const { success } = await ratelimit.limit(userId);
-  if (!success) return new Response("Too many requests", { status: 429 });
+  // Default user since Clerk is removed
+  const defaultUserId = "init-user";
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
 
-  const validated = postIssuesBodyValidator.safeParse(body);
-
-  if (!validated.success) {
-    const message =
-      "Invalid body. " + (validated.error.errors[0]?.message ?? "");
-    return new Response(message, { status: 400 });
+  if (!body.name || !body.type) {
+    return new Response("Missing required fields", { status: 400 });
   }
-
-  const { data: valid } = validated;
 
   const issues = await prisma.issue.findMany({
     where: {
-      creatorId: userId,
+      creatorId: defaultUserId, // Use the default user
     },
   });
 
-  const currentSprintIssues = issues.filter(
-    (issue) => issue.sprintId === valid.sprintId && issue.isDeleted === false
-  );
+  const issueCount = issues.length + 1;
 
-  const sprint = await prisma.sprint.findUnique({
-    where: {
-      id: valid.sprintId ?? "",
-    },
-  });
+  try {
+    const issue = await prisma.issue.create({
+      data: {
+        key: `ISSUE-${issueCount}`,
+        name: body.name,
+        type: body.type,
+        reporterId: body.reporterId ?? defaultUserId, // Default reporter
+        sprintId: body.sprintId ?? null, // Ensure null if undefined
+        sprintPosition: body.sprintPosition ?? 0,
+        boardPosition: body.boardPosition ?? -1,
+        parentId: body.parentId ?? null,
+        sprintColor: body.sprintColor ?? null,
+        creatorId: defaultUserId, //  FIX: Explicitly set the creatorId
+        description: body.description ?? "",
+        status: body.status ?? "TODO",
+        assigneeId: body.assigneeId ?? null,
+        isDeleted: false,
+      },
+    });
 
-  let boardPosition = -1;
-
-  if (sprint && sprint.status === "ACTIVE") {
-    // If issue is created in active sprint, add it to the bottom of the TODO column in board
-    const issuesInColum = currentSprintIssues.filter(
-      (issue) => issue.status === "TODO"
-    );
-    boardPosition = calculateInsertPosition(issuesInColum);
+    return NextResponse.json({ issue });
+  } catch (error) {
+    console.error("Error creating issue:", error);
+    return new Response("Internal Server Error", { status: 500 });
   }
-
-  const k = issues.length + 1;
-
-  const positionToInsert = calculateInsertPosition(currentSprintIssues);
-
-  const issue = await prisma.issue.create({
-    data: {
-      key: `ISSUE-${k}`,
-      name: valid.name,
-      type: valid.type,
-      reporterId: valid.reporterId ?? "user_2PwZmH2xP5aE0svR6hDH4AwDlcu", // Rogan as default reporter
-      sprintId: valid.sprintId ?? undefined,
-      sprintPosition: positionToInsert,
-      boardPosition,
-      parentId: valid.parentId,
-      sprintColor: valid.sprintColor,
-      creatorId: userId,
-    },
-  });
-  // return NextResponse.json<PostIssueResponse>({ issue });
-  return NextResponse.json({ issue });
 }
 
+// PATCH
 export async function PATCH(req: NextRequest) {
-  const { userId } = getAuth(req);
-  if (!userId) return new Response("Unauthenticated request", { status: 403 });
-  const { success } = await ratelimit.limit(userId);
-  if (!success) return new Response("Too many requests", { status: 429 });
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
   const validated = patchIssuesBodyValidator.safeParse(body);
 
   if (!validated.success) {
-    // eslint-disable-next-line
     const message = "Invalid body. " + validated.error.errors[0]?.message ?? "";
     return new Response(message, { status: 400 });
   }
@@ -223,6 +178,5 @@ export async function PATCH(req: NextRequest) {
     })
   );
 
-  // return NextResponse.json<PostIssueResponse>({ issue });
   return NextResponse.json({ issues: updatedIssues });
 }

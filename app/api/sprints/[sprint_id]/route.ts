@@ -1,8 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { prisma, ratelimit } from "@/server/db";
+import { prisma } from "@/server/db";
 import { SprintStatus, type Sprint } from "@prisma/client";
 import { z } from "zod";
-import { getAuth } from "@clerk/nextjs/server";
 
 const patchSprintBodyValidator = z.object({
   name: z.string().optional(),
@@ -23,14 +22,9 @@ type ParamsType = {
 };
 
 export async function PATCH(req: NextRequest, { params }: ParamsType) {
-  const { userId } = getAuth(req);
-  if (!userId) return new Response("Unauthenticated request", { status: 403 });
-  const { success } = await ratelimit.limit(userId);
-  if (!success) return new Response("Too many requests", { status: 429 });
-
+  const userId = "user_2PwZmH2xP5aE0svR6hDH4AwDlcu"; // Dummy user ID
   const { sprint_id } = params;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
   const validated = patchSprintBodyValidator.safeParse(body);
 
@@ -66,16 +60,11 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
     },
   });
 
-  // return NextResponse.json<PatchSprintResponse>({ sprint });
   return NextResponse.json({ sprint });
 }
 
 export async function DELETE(req: NextRequest, { params }: ParamsType) {
-  const { userId } = getAuth(req);
-  if (!userId) return new Response("Unauthenticated request", { status: 403 });
-  const { success } = await ratelimit.limit(userId);
-  if (!success) return new Response("Too many requests", { status: 429 });
-
+  const userId = "init-user"; // Dummy user ID
   const { sprint_id } = params;
 
   await prisma.issue.updateMany({
@@ -93,6 +82,5 @@ export async function DELETE(req: NextRequest, { params }: ParamsType) {
     },
   });
 
-  // return NextResponse.json<PatchSprintResponse>({ sprint });
   return NextResponse.json({ sprint });
 }

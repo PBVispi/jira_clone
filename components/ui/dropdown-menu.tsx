@@ -14,11 +14,11 @@ type DropdownTriggerRef = React.ElementRef<
 const DropdownTrigger = React.forwardRef<
   DropdownTriggerRef,
   DropdownTriggerProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <DropdownMenuPrimitive.Trigger
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </DropdownMenuPrimitive.Trigger>
@@ -52,11 +52,11 @@ type DropdownContentRef = React.ElementRef<
 const DropdownContent = React.forwardRef<
   DropdownContentRef,
   DropdownContentProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <DropdownMenuPrimitive.Content
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </DropdownMenuPrimitive.Content>
@@ -70,11 +70,11 @@ type DropdownLabelProps = React.ComponentProps<
 type DropdownLabelRef = React.ElementRef<typeof DropdownMenuPrimitive.Label>;
 
 const DropdownLabel = React.forwardRef<DropdownLabelRef, DropdownLabelProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <DropdownMenuPrimitive.Label
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </DropdownMenuPrimitive.Label>
@@ -89,11 +89,11 @@ type DropdownItemProps = React.ComponentProps<
 type DropdownItemRef = React.ElementRef<typeof DropdownMenuPrimitive.Item>;
 
 const DropdownItem = React.forwardRef<DropdownItemRef, DropdownItemProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <DropdownMenuPrimitive.Item
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </DropdownMenuPrimitive.Item>
@@ -108,11 +108,11 @@ type DropdownGroupProps = React.ComponentProps<
 type DropdownGroupRef = React.ElementRef<typeof DropdownMenuPrimitive.Group>;
 
 const DropdownGroup = React.forwardRef<DropdownGroupRef, DropdownGroupProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <DropdownMenuPrimitive.Group
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </DropdownMenuPrimitive.Group>
@@ -139,11 +139,11 @@ type DropdownSubTriggerRef = React.ElementRef<
 const DropdownSubTrigger = React.forwardRef<
   DropdownSubTriggerRef,
   DropdownSubTriggerProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <DropdownMenuPrimitive.SubTrigger
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </DropdownMenuPrimitive.SubTrigger>
@@ -161,11 +161,11 @@ type DropdownSubContentRef = React.ElementRef<
 const DropdownSubContent = React.forwardRef<
   DropdownSubContentRef,
   DropdownSubContentProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <DropdownMenuPrimitive.SubContent
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </DropdownMenuPrimitive.SubContent>
@@ -183,11 +183,11 @@ type DropdownSeparatorRef = React.ElementRef<
 const DropdownSeparator = React.forwardRef<
   DropdownSeparatorRef,
   DropdownSeparatorProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </DropdownMenuPrimitive.Separator>

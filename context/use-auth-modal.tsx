@@ -1,25 +1,25 @@
+
+
 "use client";
-import { type ReactNode, createContext, useContext, useState } from "react";
+import { type ReactNode, createContext, useContext } from "react";
 
 type AuthModalContextProps = {
   authModalIsOpen: boolean;
-  setAuthModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAuthModalIsOpen: (open: boolean) => void;
 };
 
+// Modify the context to **never open the modal**
 const AuthModalContext = createContext<AuthModalContextProps>({
   authModalIsOpen: false,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setAuthModalIsOpen: () => {},
+  setAuthModalIsOpen: () => {}, // Do nothing
 });
 
 export const AuthModalProvider = ({ children }: { children: ReactNode }) => {
-  const [authModalIsOpen, setAuthModalIsOpen] = useState(false);
-
   return (
     <AuthModalContext.Provider
       value={{
-        authModalIsOpen,
-        setAuthModalIsOpen,
+        authModalIsOpen: false, // Always false
+        setAuthModalIsOpen: () => {}, // Do nothing
       }}
     >
       {children}
@@ -27,4 +27,5 @@ export const AuthModalProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// Hook to use this context (no modal behavior)
 export const useAuthModalContext = () => useContext(AuthModalContext);

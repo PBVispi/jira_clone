@@ -1,4 +1,3 @@
-import { useUser } from "@clerk/nextjs";
 import { FaChevronUp } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -13,29 +12,28 @@ import { Avatar } from "@/components/avatar";
 import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { IssueAssigneeSelect } from "../../issue-select-assignee";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
-import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   issue,
 }) => {
   const { updateIssue } = useIssues();
-  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
   const { sprints } = useSprints();
-  const { user } = useUser();
   const [openAccordion, setOpenAccordion] = useState("details");
 
-  function handleAutoAssign() {
-    if (!isAuthenticated) {
-      openAuthModal();
-      return;
-    }
+  // Default user instead of Clerk authentication
+  const defaultUser = {
+    id: "init-user",
+    name: "John Doe",
+    avatar: "",
+  };
 
+  function handleAutoAssign() {
     updateIssue({
       issueId: issue.id,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      assigneeId: user!.id,
+      assigneeId: defaultUser.id,
     });
   }
+
   return (
     <Accordion
       onValueChange={setOpenAccordion}
@@ -87,17 +85,17 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
               </span>
             </div>
           </div>
-          <div className="my-2 grid grid-cols-3  items-center">
+          <div className="my-2 grid grid-cols-3 items-center">
             <span className="text-sm font-semibold text-gray-600">
               Reporter
             </span>
             <div className="flex items-center gap-x-3 ">
               <Avatar
-                src={issue.reporter?.avatar}
-                alt={`${issue.reporter?.name ?? "Unassigned"}`}
+                src={issue.reporter?.avatar ?? defaultUser.avatar}
+                alt={`${issue.reporter?.name ?? defaultUser.name}`}
               />
               <span className="whitespace-nowrap text-sm">
-                {issue.reporter?.name}
+                {issue.reporter?.name ?? defaultUser.name}
               </span>
             </div>
           </div>

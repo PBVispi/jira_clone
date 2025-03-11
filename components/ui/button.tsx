@@ -36,7 +36,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             className
           )}
         >
-          {children}
+          <span>{children}</span>
         </Link>
       );
     return (

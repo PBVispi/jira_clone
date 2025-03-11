@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { prisma, ratelimit } from "@/server/db";
+import { prisma } from "@/server/db";
 import {
   IssueStatus,
   type Issue,
@@ -8,9 +8,6 @@ import {
 } from "@prisma/client";
 import { z } from "zod";
 import { type GetIssuesResponse } from "../route";
-import { clerkClient } from "@clerk/nextjs";
-import { filterUserForClient } from "@/utils/helpers";
-import { getAuth } from "@clerk/nextjs/server";
 
 export type GetIssueDetailsResponse = {
   issue: GetIssuesResponse["issues"][number] | null;
@@ -36,7 +33,7 @@ export async function GET(
       id: issue.parentId,
     },
   });
-  // return NextResponse.json<GetIssueDetailsResponse>({ issue });
+
   return NextResponse.json({ issue: { ...issue, parent } });
 }
 
@@ -67,19 +64,13 @@ type ParamsType = {
 };
 
 export async function PATCH(req: NextRequest, { params }: ParamsType) {
-  const { userId } = getAuth(req);
-  if (!userId) return new Response("Unauthenticated request", { status: 403 });
-  const { success } = await ratelimit.limit(userId);
-  if (!success) return new Response("Too many requests", { status: 429 });
   const { issueId } = params;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
   const validated = patchIssueBodyValidator.safeParse(body);
 
   if (!validated.success) {
-    // eslint-disable-next-line
-    const message = "Invalid body. " + validated.error.errors[0]?.message ?? "";
+    const message = "Invalid body. " + (validated.error.errors[0]?.message ?? "");
     return new Response(message, { status: 400 });
   }
   const { data: valid } = validated;
@@ -114,26 +105,12 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
     },
   });
 
-  if (issue.assigneeId) {
-    const assignee = await clerkClient.users.getUser(issue.assigneeId);
-    const assigneeForClient = filterUserForClient(assignee);
-    return NextResponse.json({
-      issue: { ...issue, assignee: assigneeForClient },
-    });
-  }
-
-  // return NextResponse.json<PostIssueResponse>({ issue });
   return NextResponse.json({
     issue: { ...issue, assignee: null },
   });
 }
 
 export async function DELETE(req: NextRequest, { params }: ParamsType) {
-  const { userId } = getAuth(req);
-  if (!userId) return new Response("Unauthenticated request", { status: 403 });
-  const { success } = await ratelimit.limit(userId);
-  if (!success) return new Response("Too many requests", { status: 429 });
-
   const { issueId } = params;
 
   const issue = await prisma.issue.update({
@@ -148,6 +125,5 @@ export async function DELETE(req: NextRequest, { params }: ParamsType) {
     },
   });
 
-  // return NextResponse.json<PostIssueResponse>({ issue });
   return NextResponse.json({ issue });
 }

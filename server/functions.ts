@@ -1,6 +1,4 @@
-import { filterUserForClient, generateIssuesForClient } from "@/utils/helpers";
-import { type UserResource } from "@clerk/types";
-import { clerkClient } from "@clerk/nextjs";
+import { generateIssuesForClient } from "@/utils/helpers";
 import {
   defaultUsers,
   generateInitialUserComments,
@@ -10,9 +8,7 @@ import {
 import { prisma } from "./db";
 import { SprintStatus } from "@prisma/client";
 
-export async function getInitialIssuesFromServer(
-  userId: UserResource["id"] | undefined | null
-) {
+export async function getInitialIssuesFromServer(userId: string | undefined | null) {
   let activeIssues = await prisma.issue.findMany({
     where: { isDeleted: false, creatorId: userId ?? "init" },
   });
@@ -23,13 +19,12 @@ export async function getInitialIssuesFromServer(
     // Create comments for default issues
     await initDefaultIssueComments(userId);
 
-    const newActiveIssues = await prisma.issue.findMany({
+    activeIssues = await prisma.issue.findMany({
       where: {
         creatorId: userId,
         isDeleted: false,
       },
     });
-    activeIssues = newActiveIssues;
   }
 
   if (!activeIssues || activeIssues.length === 0) {
@@ -46,24 +41,14 @@ export async function getInitialIssuesFromServer(
     .flatMap((issue) => [issue.assigneeId, issue.reporterId] as string[])
     .filter(Boolean);
 
-  // USE THIS IF RUNNING LOCALLY ----------------------
-  // const users = await prisma.defaultUser.findMany({
-  //   where: {
-  //     id: {
-  //       in: userIds,
-  //     },
-  //   },
-  // });
-  // --------------------------------------------------
-
-  // COMMENT THIS IF RUNNING LOCALLY ------------------
-  const users = (
-    await clerkClient.users.getUserList({
-      userId: userIds,
-      limit: 20,
-    })
-  ).map(filterUserForClient);
-  // --------------------------------------------------
+  // Fetch users from the database instead of Clerk
+  const users = await prisma.defaultUser.findMany({
+    where: {
+      id: {
+        in: userIds,
+      },
+    },
+  });
 
   const issues = generateIssuesForClient(
     activeIssues,
@@ -74,15 +59,12 @@ export async function getInitialIssuesFromServer(
 }
 
 export async function getInitialProjectFromServer() {
-  const project = await prisma.project.findUnique({
+  return await prisma.project.findUnique({
     where: { key: "JIRA-CLONE" },
   });
-  return project;
 }
 
-export async function getInitialSprintsFromServer(
-  userId: UserResource["id"] | undefined
-) {
+export async function getInitialSprintsFromServer(userId: string | undefined) {
   let sprints = await prisma.sprint.findMany({
     where: {
       OR: [{ status: SprintStatus.ACTIVE }, { status: SprintStatus.PENDING }],
@@ -96,13 +78,11 @@ export async function getInitialSprintsFromServer(
   if (userId && (!sprints || sprints.length === 0)) {
     // New user, create default sprints
     await initDefaultSprints(userId);
-
-    const newSprints = await prisma.sprint.findMany({
+    sprints = await prisma.sprint.findMany({
       where: {
         creatorId: userId,
       },
     });
-    sprints = newSprints;
   }
   return sprints;
 }
@@ -120,6 +100,7 @@ export async function initProject() {
     },
   });
 }
+
 export async function initDefaultUsers() {
   await Promise.all(
     defaultUsers.map(
@@ -141,6 +122,7 @@ export async function initDefaultUsers() {
     )
   );
 }
+
 export async function initDefaultProjectMembers() {
   await Promise.all(
     defaultUsers.map(

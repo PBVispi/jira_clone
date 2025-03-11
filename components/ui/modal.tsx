@@ -25,7 +25,7 @@ type ContentProps = React.ComponentProps<typeof ModalPrimitive.Content> & {
 type ContentRef = React.ElementRef<typeof ModalPrimitive.Content>;
 
 const ModalContent = React.forwardRef<ContentRef, ContentProps>(
-  ({ children, className, customStyle = false, ...props }, forwardedRef) => (
+  ({ children, className, customStyle = false, ...props }, ref) => (
     <div className="flex justify-center">
       <ModalPrimitive.Content
         className={clsx(
@@ -34,7 +34,7 @@ const ModalContent = React.forwardRef<ContentRef, ContentProps>(
           className
         )}
         {...props}
-        ref={forwardedRef}
+        ref={ref}
       >
         {children}
       </ModalPrimitive.Content>
@@ -62,14 +62,14 @@ type OverlayProps = React.ComponentProps<typeof ModalPrimitive.Overlay>;
 type OverlayRef = React.ElementRef<typeof ModalPrimitive.Overlay>;
 
 const ModalOverlay = React.forwardRef<OverlayRef, OverlayProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <ModalPrimitive.Overlay
       className={clsx(
         "fixed inset-0 z-50 bg-black bg-opacity-40 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
         className
       )}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </ModalPrimitive.Overlay>
@@ -81,11 +81,11 @@ type TitleProps = React.ComponentProps<typeof ModalPrimitive.Title>;
 type TitleRef = React.ElementRef<typeof ModalPrimitive.Title>;
 
 const ModalTitle = React.forwardRef<TitleRef, TitleProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <ModalPrimitive.Title
       className={clsx("text-2xl", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </ModalPrimitive.Title>
@@ -97,11 +97,11 @@ type DescriptionProps = React.ComponentProps<typeof ModalPrimitive.Description>;
 type DescriptionRef = React.ElementRef<typeof ModalPrimitive.Description>;
 
 const ModalDescription = React.forwardRef<DescriptionRef, DescriptionProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <ModalPrimitive.Description
       className={clsx("text-sm text-gray-500", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </ModalPrimitive.Description>
@@ -113,11 +113,11 @@ type CloseProps = React.ComponentProps<typeof ModalPrimitive.Close>;
 type CloseRef = React.ElementRef<typeof ModalPrimitive.Close>;
 
 const ModalClose = React.forwardRef<CloseRef, CloseProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <ModalPrimitive.Close
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </ModalPrimitive.Close>

@@ -14,11 +14,11 @@ type NavigationMenuTriggerRef = React.ElementRef<
 const NavigationMenuTrigger = React.forwardRef<
   NavigationMenuTriggerRef,
   NavigationMenuTriggerProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <NavMenuPrimitive.Trigger
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </NavMenuPrimitive.Trigger>
@@ -54,11 +54,11 @@ type NavigationMenuItemRef = React.ElementRef<typeof NavMenuPrimitive.Item>;
 const NavigationMenuItem = React.forwardRef<
   NavigationMenuItemRef,
   NavigationMenuItemProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <NavMenuPrimitive.Item
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </NavMenuPrimitive.Item>
@@ -76,11 +76,11 @@ type NavigationMenuContentRef = React.ElementRef<
 const NavigationMenuContent = React.forwardRef<
   NavigationMenuContentRef,
   NavigationMenuContentProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <NavMenuPrimitive.Content
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </NavMenuPrimitive.Content>
@@ -96,11 +96,11 @@ type NavigationMenuLinkRef = React.ElementRef<typeof NavMenuPrimitive.Link>;
 const NavigationMenuLink = React.forwardRef<
   NavigationMenuLinkRef,
   NavigationMenuLinkProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <NavMenuPrimitive.Link
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </NavMenuPrimitive.Link>
@@ -114,11 +114,11 @@ type NavigationMenuSubRef = React.ElementRef<typeof NavMenuPrimitive.Sub>;
 const NavigationMenuSub = React.forwardRef<
   NavigationMenuSubRef,
   NavigationMenuSubProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <NavMenuPrimitive.Sub
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </NavMenuPrimitive.Sub>
@@ -136,11 +136,11 @@ type NavigationMenuViewportRef = React.ElementRef<
 const NavigationMenuViewport = React.forwardRef<
   NavigationMenuViewportRef,
   NavigationMenuViewportProps
->(({ className, ...props }, forwardedRef) => (
+>(({ className, ...props }, ref) => (
   <NavMenuPrimitive.Viewport
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   />
 ));
 
@@ -156,11 +156,11 @@ type NavigationMenuIndicatorRef = React.ElementRef<
 const NavigationMenuIndicator = React.forwardRef<
   NavigationMenuIndicatorRef,
   NavigationMenuIndicatorProps
->(({ children, className, ...props }, forwardedRef) => (
+>(({ children, className, ...props }, ref) => (
   <NavMenuPrimitive.Indicator
     className={clsx("", className)}
     {...props}
-    ref={forwardedRef}
+    ref={ref}
   >
     {children}
   </NavMenuPrimitive.Indicator>

@@ -8,24 +8,23 @@ import {
   getInitialProjectFromServer,
   getInitialSprintsFromServer,
 } from "@/server/functions";
-import { currentUser } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Roadmap",
 };
 
 const RoadmapPage = async () => {
-  const user = await currentUser();
+  const defaultUserId = "init-user"; // Default user ID instead of Clerk authentication
   const queryClient = getQueryClient();
 
   await Promise.all([
-    await queryClient.prefetchQuery(["issues"], () =>
-      getInitialIssuesFromServer(user?.id)
+    queryClient.prefetchQuery(["issues"], () =>
+      getInitialIssuesFromServer(defaultUserId)
     ),
-    await queryClient.prefetchQuery(["sprints"], () =>
-      getInitialSprintsFromServer(user?.id)
+    queryClient.prefetchQuery(["sprints"], () =>
+      getInitialSprintsFromServer(defaultUserId)
     ),
-    await queryClient.prefetchQuery(["project"], getInitialProjectFromServer),
+    queryClient.prefetchQuery(["project"], getInitialProjectFromServer),
   ]);
 
   const dehydratedState = dehydrate(queryClient);

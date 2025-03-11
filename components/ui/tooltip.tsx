@@ -10,11 +10,11 @@ type TooltipTriggerProps = React.ComponentProps<
 type TooltipTriggerRef = React.ElementRef<typeof TooltipPrimitive.Trigger>;
 
 const TooltipTrigger = React.forwardRef<TooltipTriggerRef, TooltipTriggerProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <TooltipPrimitive.Trigger
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </TooltipPrimitive.Trigger>
@@ -43,11 +43,11 @@ type TooltipContentProps = React.ComponentProps<
 type TooltipContentRef = React.ElementRef<typeof TooltipPrimitive.Content>;
 
 const TooltipContent = React.forwardRef<TooltipContentRef, TooltipContentProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, ...props }, ref) => (
     <TooltipPrimitive.Content
       className={clsx("", className)}
       {...props}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </TooltipPrimitive.Content>
