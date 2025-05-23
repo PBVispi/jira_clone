@@ -42,6 +42,6 @@ export async function GET(req: NextRequest, { params }: MembersParams) {
   //).map(filterUserForClient);
   // --------------------------------------------------
 
-  // return NextResponse.json<GetProjectMembersResponse>({ members:users });
-  return NextResponse.json({ members: users });
+  return NextResponse.json<GetProjectMembersResponse>({ members:users });
+  //return NextResponse.json({ members: users });
 }
